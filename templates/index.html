@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleAR - Premium Shopping</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 1. PREMIUM GLASSMORPHISM THEME */
+        :root {
+            --primary: #bb86fc;
+            --secondary: #03dac6;
+            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-gradient); background-attachment: fixed; color: white; margin: 0; padding: 0; min-height: 100vh;}
+        h1, h2, h3 { color: #ffffff; font-weight: 600; letter-spacing: 0.5px; }
+        
+        nav { background: rgba(18, 18, 18, 0.7); backdrop-filter: blur(15px); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); display: none; z-index: 1000; position: sticky; top: 0;}
+        .nav-logo { font-size: 24px; font-weight: 700; background: linear-gradient(45deg, var(--primary), var(--secondary)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; gap: 20px; align-items: center;}
+        .nav-btn { background: none; border: none; color: #ddd; font-size: 15px; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: 'Poppins', sans-serif;}
+        .nav-btn:hover { color: var(--secondary); transform: translateY(-2px);}
+        .cart-badge { background: var(--secondary); color: #000; padding: 3px 10px; border-radius: 20px; font-size: 12px; margin-left: 6px; font-weight: 700; box-shadow: 0 0 10px rgba(3, 218, 198, 0.4);}
+
+        .page { display: none; padding: 50px 20px; text-align: center; max-width: 1100px; margin: 0 auto; animation: fadeIn 0.4s ease-in-out;}
+        .active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        input { padding: 15px 20px; margin: 10px 0; width: 100%; box-sizing: border-box; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; font-size: 14px; font-family: 'Poppins', sans-serif; transition: 0.3s;}
+        input:focus { outline: none; border-color: var(--primary); background: rgba(0,0,0,0.4); box-shadow: 0 0 15px rgba(187, 134, 252, 0.2);}
+        
+        button.primary-btn { background: linear-gradient(45deg, var(--primary), #7c4dff); color: #fff; padding: 12px 28px; font-size: 15px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; box-shadow: 0 4px 15px rgba(187, 134, 252, 0.4); width: 100%;}
+        button.primary-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(187, 134, 252, 0.6); }
+        button.secondary-btn { background: var(--glass-bg); color: #fff; padding: 10px 20px; border: 1px solid var(--glass-border); border-radius: 25px; cursor: pointer; font-weight: 600; transition: 0.3s; backdrop-filter: blur(5px);}
+        button.secondary-btn:hover { background: rgba(255,255,255,0.1); border-color: white;}
+        
+        /* 2. E-COMMERCE DASHBOARD & CARDS */
+        .hero-banner { background: linear-gradient(135deg, rgba(187, 134, 252, 0.9), rgba(3, 218, 198, 0.9)); border-radius: 24px; padding: 40px 50px; text-align: left; position: relative; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(3, 218, 198, 0.3); display: flex; justify-content: space-between; align-items: center;}
+        .hero-text { max-width: 60%; z-index: 2; position: relative;}
+        .hero-title { font-size: 42px; font-weight: 800; color: #121212; margin: 0; line-height: 1.2;}
+        .hero-subtitle { font-size: 18px; color: #121212; margin: 15px 0 25px 0; font-weight: 600;}
+        .hero-btn { background: #121212; color: #fff; padding: 12px 30px; border-radius: 25px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.4);}
+        .hero-btn:hover { background: #333; transform: scale(1.05); }
+        
+        .trust-badges { display: flex; gap: 20px; justify-content: center; margin-bottom: 50px; flex-wrap: wrap; }
+        .badge { background: var(--glass-bg); padding: 15px 25px; border-radius: 16px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 12px; font-weight: 600; color: white; backdrop-filter: blur(10px); flex: 1; min-width: 200px; text-align: left;}
+        .badge-icon { font-size: 24px; background: rgba(3, 218, 198, 0.2); padding: 10px; border-radius: 12px; color: var(--secondary); }
+
+        /* AI STYLIST CSS */
+        .ai-stylist-card { background: linear-gradient(135deg, rgba(3, 218, 198, 0.15), rgba(187, 134, 252, 0.15)); border: 1px solid var(--secondary); border-radius: 20px; padding: 35px; margin-bottom: 40px; backdrop-filter: blur(15px); box-shadow: 0 10px 40px rgba(3, 218, 198, 0.2); text-align: left; position: relative; overflow: hidden; }
+        .ai-stylist-card select { padding: 14px 20px; border-radius: 12px; background: rgba(0,0,0,0.6); color: white; border: 1px solid var(--glass-border); font-family: 'Poppins', sans-serif; font-size: 15px; flex: 1; cursor: pointer; outline: none; transition: 0.3s; }
+        .ai-stylist-card select:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(187, 134, 252, 0.3); }
+        .ai-glow { position: absolute; width: 150px; height: 150px; background: var(--secondary); filter: blur(80px); opacity: 0.3; top: -50px; right: -50px; z-index: 0; pointer-events: none;}
+
+        #shop-container, #wishlist-container { display: flex; justify-content: center; gap: 35px; flex-wrap: wrap; margin-top: 30px; }
+        .product-card { background: var(--glass-bg); padding: 25px; border-radius: 24px; border: 1px solid var(--glass-border); text-align: left; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 320px; backdrop-filter: blur(10px); position: relative; overflow: hidden;}
+        .product-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .product-card img.main-img { width: 100%; height: 260px; object-fit: contain; background: rgba(0,0,0,0.3); border-radius: 16px; margin-bottom: 20px; transition: 0.3s; }
+        .product-card:hover img.main-img { transform: scale(1.05); }
+        .product-card h3 { margin: 0 0 5px 0; color: white; font-size: 22px; }
+        
+        .wishlist-btn { position: absolute; top: 35px; right: 35px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px); z-index: 5; user-select: none;}
+        .wishlist-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+        
+        .swatch-container { display: flex; gap: 12px; margin: 20px 0; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 15px; width: fit-content;}
+        .color-swatch { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.4);}
+        .color-swatch:hover { transform: scale(1.15); }
+        .color-swatch.active-swatch { border-color: var(--secondary); transform: scale(1.2); box-shadow: 0 0 15px rgba(3, 218, 198, 0.6); }
+        .product-actions { display: flex; justify-content: space-between; margin-top: 25px; align-items: center; gap: 15px;}
+
+        /* 3. CART & CHECKOUT */
+        .layout-split { display: flex; gap: 30px; text-align: left; margin-top: 30px; flex-wrap: wrap;}
+        .layout-main { flex: 2; min-width: 300px; }
+        .layout-sidebar { flex: 1; min-width: 300px; background: var(--glass-bg); padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border); height: fit-content; position: sticky; top: 80px; backdrop-filter: blur(10px);}
+        .cart-item { display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); padding: 20px; border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--glass-border); backdrop-filter: blur(10px);}
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: #aaa;}
+        .summary-total { display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; color: #fff; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border);}
+        .checkout-section { background: var(--glass-bg); padding: 25px; border-radius: 12px; border: 1px solid var(--glass-border); margin-bottom: 20px; backdrop-filter: blur(10px);}
+        .checkout-section h3 { margin-top: 0; color: var(--primary); font-size: 18px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;}
+
+        /* 4. AR UI & GESTURE FEEDBACK */
+        .ar-fullscreen { position: relative; width: 100%; max-width: 500px; height: 80vh; margin: 0 auto; border-radius: 30px; overflow: hidden; background: #000; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);}
+        .ar-fullscreen video, .ar-fullscreen img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        .ar-fullscreen img { display: none; z-index: 10; pointer-events: none; }
+        
+        .gesture-badge { position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); background: rgba(3, 218, 198, 0.9); color: black; padding: 15px 30px; border-radius: 30px; font-weight: 700; font-size: 24px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.4s; opacity: 0; pointer-events: none; }
+        
+        .snapshot-btn { position: absolute; right: 15px; top: 40%; width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid white; cursor: pointer; z-index: 30; backdrop-filter: blur(5px); display:flex; justify-content:center; align-items:center; font-size: 20px;}
+        .erase-btn { position: absolute; left: 15px; top: 40%; width: 50px; height: 50px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 2px solid #cf6679; cursor: pointer; z-index: 30; backdrop-filter: blur(5px); display:flex; flex-direction: column; justify-content:center; align-items:center; color: white; }
+        
+        /* SHARE BUTTON CSS */
+        .share-btn { position: absolute; right: 15px; top: 52%; width: 50px; height: 50px; border-radius: 50%; background: rgba(3, 218, 198, 0.3); border: 2px solid var(--secondary); cursor: pointer; z-index: 30; backdrop-filter: blur(5px); display:flex; justify-content:center; align-items:center; font-size: 20px; transition: 0.2s; }
+        .share-btn:hover { transform: scale(1.1); background: var(--secondary); }
+
+        .ar-bottom-panel { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95) 40%, #000); padding: 40px 20px 20px 20px; z-index: 30; box-sizing: border-box; }
+        .ar-carousel { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
+        .ar-item { width: 75px; height: 75px; background: rgba(255,255,255,0.1); border-radius: 20px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; flex-shrink: 0; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px);}
+        .ar-item.active-item { border-color: var(--secondary); background: rgba(3, 218, 198, 0.1); transform: translateY(-8px); box-shadow: 0 10px 20px rgba(3, 218, 198, 0.2); }
+
+        /* POLL UI CSS */
+        .poll-bar { height: 24px; background: rgba(255,255,255,0.1); border-radius: 12px; margin-top: 15px; overflow: hidden; display: flex; }
+        .poll-fill-yes { height: 100%; background: var(--secondary); transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .poll-fill-no { height: 100%; background: #cf6679; transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="nav-logo">StyleAR</div>
+        <div class="nav-links">
+            <button class="nav-btn" onclick="switchPage('shop-page')">Store</button>
+            <button class="nav-btn" onclick="switchPage('wishlist-page')" style="display:flex; align-items:center;">Saved <span class="cart-badge" id="wishlist-count" style="background: #cf6679; color: white;">0</span></button>
+            <button class="nav-btn" onclick="switchPage('cart-page')" style="display:flex; align-items:center;">Cart <span class="cart-badge" id="cart-count">0</span></button>
+            <button class="nav-btn" onclick="logout()" style="color: #ff4757;">Sign Out</button>
+        </div>
+    </nav>
+
+    <div id="login-page" class="page active-page">
+        <div style="background: var(--glass-bg); padding: 50px; border-radius: 24px; max-width: 400px; margin: 60px auto; border: 1px solid var(--glass-border); backdrop-filter: blur(15px); box-shadow: 0 20px 50px rgba(0,0,0,0.5);" id="auth-box"></div>
+    </div>
+
+    <div id="shop-page" class="page">
+        <div class="hero-banner">
+            <div class="hero-text">
+                <h1 class="hero-title">Great Summer Sale 2026</h1>
+                <p class="hero-subtitle">Experience our new AI Virtual Fitting Room and get up to 40% off premium styles.</p>
+                <button class="hero-btn" onclick="document.getElementById('shop-container').scrollIntoView({behavior: 'smooth'})">Shop Now</button>
+            </div>
+            <div style="position: absolute; right: -50px; top: -50px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; z-index: 1;"></div>
+        </div>
+
+        <div class="trust-badges">
+            <div class="badge"><div class="badge-icon">✨</div><div><div style="font-size: 16px;">AI Fit Prediction</div><div style="font-size: 12px; color: #aaa;">Perfect size every time</div></div></div>
+            <div class="badge"><div class="badge-icon">✋</div><div><div style="font-size: 16px;">Gesture Control</div><div style="font-size: 12px; color: #aaa;">Touchless AR navigation</div></div></div>
+            <div class="badge"><div class="badge-icon">🛡️</div><div><div style="font-size: 16px;">Secure Checkout</div><div style="font-size: 12px; color: #aaa;">100% safe payments</div></div></div>
+        </div>
+
+        <div class="ai-stylist-card">
+            <div class="ai-glow"></div>
+            <h3 style="margin-top: 0; color: var(--secondary); font-size: 24px; position: relative; z-index: 1;">✨ AI Outfit Stylist</h3>
+            <p style="color: #ddd; margin-bottom: 25px; position: relative; z-index: 1;">Tell the AI what you're looking for, and it will build your perfect look.</p>
+            
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; position: relative; z-index: 1;">
+                <select id="ai-gender">
+                    <option value="all">Who are we styling?</option>
+                    <option value="men">Menswear</option>
+                    <option value="women">Womenswear</option>
+                </select>
+                <select id="ai-occasion">
+                    <option value="all">What's the occasion?</option>
+                    <option value="casual">☕ Casual Hangout</option>
+                    <option value="summer">☀️ Summer Vacation</option>
+                    <option value="winter">❄️ Winter Cozy</option>
+                </select>
+                <button class="primary-btn" style="flex: 1; min-width: 200px; background: var(--secondary); color: black;" onclick="runAIStylist()">Curate My Wardrobe</button>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; margin-bottom: 20px;">
+            <h2 style="margin: 0; font-size: 28px;">Trending Styles</h2>
+        </div>
+
+        <div id="shop-container"></div>
+    </div>
+
+    <div id="wishlist-page" class="page">
+        <h1 style="font-size: 36px; text-align: left;">Your Wishlist</h1>
+        <p style="color: #aaa; text-align: left;">Items you've saved for later.</p>
+        <div id="wishlist-container"></div>
+    </div>
+
+    <div id="cart-page" class="page">
+        <h1 style="font-size: 36px; text-align: left;">Your Shopping Bag</h1>
+        <div class="layout-split" id="cart-content"></div>
+    </div>
+
+    <div id="checkout-page" class="page">
+        <h1 style="font-size: 36px; text-align: left;">Secure Checkout</h1>
+        <div class="layout-split">
+            <div class="layout-main">
+                <div class="checkout-section">
+                    <h3>1. Shipping Address</h3>
+                    <div style="display:flex; gap:10px;"><input type="text" placeholder="First Name"><input type="text" placeholder="Last Name"></div>
+                    <input type="text" placeholder="Street Address">
+                    <div style="display:flex; gap:10px;"><input type="text" placeholder="City"><input type="text" placeholder="Zip Code"></div>
+                </div>
+                
+                <div class="checkout-section" style="padding: 0; overflow: hidden; text-align: left;">
+                    <h3 style="padding: 15px 25px; margin: 0; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--glass-border);">2. Select a Payment Method</h3>
+                    
+                    <div style="padding: 20px 25px; border-bottom: 1px solid var(--glass-border);">
+                        <label style="display: block; cursor: pointer; font-size: 16px; margin-bottom: 5px;">
+                            <input type="radio" name="pay_method" value="wallet" onchange="togglePayment(this.value)" style="width: auto; margin-right: 10px; margin-bottom: 0;">
+                            <b>Use your ₹1500.00 StyleAR Balance</b>
+                        </label>
+                        <div style="color: #cf6679; font-size: 13px; margin-left: 28px;">ℹ️ Insufficient balance. <span style="color: var(--secondary); cursor: pointer;">Add money & get rewarded</span></div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px; margin-left: 28px;">
+                            <input type="text" placeholder="Enter Promo Code" style="margin: 0; padding: 10px; flex: 2; border-radius: 8px;">
+                            <button class="secondary-btn" style="flex: 1; padding: 10px; border-radius: 8px;">Apply</button>
+                        </div>
+                    </div>
+
+                    <div style="padding: 20px 25px;">
+                        <h4 style="margin-top: 0; margin-bottom: 20px; font-size: 18px;">Another payment method</h4>
+
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; cursor: pointer; font-size: 16px;">
+                                <input type="radio" name="pay_method" value="card" checked onchange="togglePayment(this.value)" style="width: auto; margin-right: 10px; margin-bottom: 0;">
+                                <b>Credit or debit card</b>
+                            </label>
+                            <div style="margin-left: 28px; margin-top: 8px; margin-bottom: 12px;">
+                                <img src="https://img.icons8.com/color/48/000000/visa.png" height="24" style="vertical-align: middle; margin-right: 5px;">
+                                <img src="https://img.icons8.com/color/48/000000/mastercard.png" height="24" style="vertical-align: middle; margin-right: 5px;">
+                                <img src="https://img.icons8.com/color/48/000000/amex.png" height="24" style="vertical-align: middle;">
+                            </div>
+                            <div id="card-inputs" style="display: block; margin-left: 28px;">
+                                <input type="text" placeholder="Card Number" style="padding: 12px; margin-bottom: 8px; border-radius: 8px;">
+                                <div style="display:flex; gap:10px;">
+                                    <input type="text" placeholder="MM/YY" style="padding: 12px; border-radius: 8px;">
+                                    <input type="password" placeholder="CVV" style="padding: 12px; border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; cursor: pointer; font-size: 16px;">
+                                <input type="radio" name="pay_method" value="netbanking" onchange="togglePayment(this.value)" style="width: auto; margin-right: 10px; margin-bottom: 0;">
+                                <b>Net Banking</b>
+                            </label>
+                            <div id="netbanking-inputs" style="display: none; margin-left: 28px; margin-top: 10px;">
+                                <select style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.6); color: white; border: 1px solid var(--glass-border); outline: none; font-family: 'Poppins', sans-serif;">
+                                    <option>Choose your Bank</option>
+                                    <option>HDFC Bank</option>
+                                    <option>ICICI Bank</option>
+                                    <option>State Bank of India</option>
+                                    <option>Axis Bank</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; cursor: pointer; font-size: 16px;">
+                                <input type="radio" name="pay_method" value="upi" onchange="togglePayment(this.value)" style="width: auto; margin-right: 10px; margin-bottom: 0;">
+                                <b>UPI (Google Pay, PhonePe, Paytm)</b>
+                            </label>
+                            <div id="upi-inputs" style="display: none; margin-left: 28px; margin-top: 10px; color: #aaa; font-size: 13px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid var(--glass-border);">
+                                📱 Open your UPI app on your phone. You will be asked to scan a secure QR code on the next screen to complete the payment.
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="display: block; cursor: pointer; font-size: 16px;">
+                                <input type="radio" name="pay_method" value="emi" onchange="togglePayment(this.value)" style="width: auto; margin-right: 10px; margin-bottom: 0;">
+                                <b>EMI (Easy Installments)</b>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layout-sidebar">
+                <h3 style="margin-top: 0; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">Order Summary</h3>
+                <div id="checkout-summary"></div>
+                <button class="primary-btn" style="margin-top: 20px; background: var(--secondary); color: #000;" onclick="placeOrder()">Complete Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="share-page" class="page">
+        <h1 style="font-size: 36px; margin-bottom: 5px;">📤 Ask Your Friends!</h1>
+        <p style="color: #aaa; margin-top: 0; margin-bottom: 30px;">Copy this private link and send it to your friends to get their feedback before you buy.</p>
+        
+        <div style="max-width: 500px; margin: 0 auto; background: var(--glass-bg); padding: 40px; border-radius: 24px; border: 1px solid var(--glass-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(15px);">
+            <input type="text" id="poll-link" readonly style="text-align: center; color: var(--secondary); font-weight: bold; background: rgba(3, 218, 198, 0.1); border-color: var(--secondary); font-size: 18px; padding: 20px;">
+            
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button class="primary-btn" style="flex: 2; font-size: 16px; padding: 15px;" onclick="copyPollLink()">📋 Copy Link</button>
+                <button class="secondary-btn" style="flex: 1; font-size: 16px; padding: 15px;" onclick="simulateFriendView()" title="See what they will see!">👁️ Preview View</button>
+            </div>
+            <button class="nav-btn" style="margin-top: 25px; color: #ff4757; font-size: 16px;" onclick="switchPage('shop-page')">Cancel & Return to Shop</button>
+        </div>
+    </div>
+
+    <div id="poll-page" class="page">
+        <h1 style="font-size: 36px; margin-bottom: 5px;">Help me decide!</h1>
+        <p style="color: #aaa; margin-top: 0; margin-bottom: 30px;">Your friend is trying on the <span id="poll-item-name" style="color: var(--secondary); font-weight: bold;">Item</span>.</p>
+        
+        <div style="max-width: 450px; margin: 0 auto; background: var(--glass-bg); padding: 25px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); box-shadow: 0 15px 35px rgba(0,0,0,0.5);">
+            <img id="poll-image" src="" style="width: 100%; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);">
+            
+            <div id="poll-voting-area">
+                <h3 style="margin-top: 0; font-size: 20px;">What do you think?</h3>
+                <div style="display: flex; gap: 15px;">
+                    <button class="primary-btn" style="flex: 1; font-size: 18px; padding: 15px;" onclick="castVote('yes')">🔥 Buy It!</button>
+                    <button class="secondary-btn" style="flex: 1; font-size: 18px; padding: 15px; border-color: #cf6679; color: #cf6679;" onclick="castVote('no')">👎 Pass</button>
+                </div>
+            </div>
+
+            <div id="poll-results-area" style="display: none; text-align: left;">
+                <h3 style="margin: 0 0 15px 0; font-size: 20px;">Live Results</h3>
+                <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: bold;">
+                    <span style="color: var(--secondary);" id="vote-yes-text">🔥 Buy It! (0%)</span>
+                    <span style="color: #cf6679;" id="vote-no-text">👎 Pass (0%)</span>
+                </div>
+                <div class="poll-bar">
+                    <div class="poll-fill-yes" id="bar-yes" style="width: 0%;"></div>
+                    <div class="poll-fill-no" id="bar-no" style="width: 0%;"></div>
+                </div>
+                <button class="secondary-btn" style="width: 100%; margin-top: 25px;" onclick="switchPage('shop-page')">Enter Store</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ar-page" class="page" style="padding-top: 20px;">
+        <button class="nav-btn" style="color: #aaa; text-align:left; width: 100%; max-width: 500px; display: block; margin: 0 auto 15px auto; font-size: 16px;" onclick="switchPage('shop-page')">← Back to Store</button>
+        
+        <div class="ar-fullscreen">
+            <video id="webcam" autoplay playsinline></video>
+            <img id="result-img" alt="AR Result">
+            <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+            
+            <div id="loading-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index:50; display:none; flex-direction:column; justify-content:center; align-items:center; backdrop-filter: blur(5px);">
+                <div style="width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--secondary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                <div style="color:var(--secondary); font-weight:600; margin-top: 15px; font-size: 16px;">Calibrating AI Engine...</div>
+            </div>
+
+            <div id="gesture-feedback" class="gesture-badge">👍 Next Item</div>
+
+            <div class="snapshot-btn" onclick="takeSnapshot()" title="Take Photo">📸</div>
+            <div class="erase-btn" onclick="clearARShirt()" title="Erase Frame"><span style="font-size: 20px;">🚫</span></div>
+            
+            <div class="share-btn" onclick="openSharePage()" title="Ask Friends">📤</div>
+
+            <div id="ai-sizing-dashboard" style="position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 8px 18px; border-radius: 25px; font-size: 14px; border: 1px solid var(--secondary); z-index: 40; backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                <span style="color: var(--secondary); font-weight: 700;">✨ AI Fit:</span> 
+                <span id="predicted-size-text" style="color: white; margin-left: 5px; font-weight: 300;">Scanning...</span>
+            </div>
+
+            <div class="ar-bottom-panel">
+                <div class="ar-carousel" id="ar-clothing-carousel"></div>
+                <div class="ar-product-bar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <div style="text-align: left;">
+                        <div id="ar-product-title" style="font-weight: 600; font-size: 18px; color: #fff;">Product Name</div>
+                        <div style="color: var(--secondary); font-weight: 700; font-size: 22px;" id="ar-product-price">₹0.00</div>
+                    </div>
+                    <button class="primary-btn" style="width: auto; border-radius: 20px; box-shadow: none;" onclick="buyFromAR()">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. DATA & STATE (Updated to INR values)
+        const groupedProducts = [
+            {
+                groupId: 'tshirts_group', name: 'Premium Tech Tee', price: 799.00, tags: ['men', 'casual', 'summer'],
+                variations: [
+                    { id: 'shirt1.png', colorName: 'Obsidian Black', hex: '#222222', image: '/static/shirt1.png' },
+                    { id: 'shirt2.png', colorName: 'Cloud White', hex: '#ffffff', image: '/static/shirt2.png' },
+                    { id: 'shirt4.png', colorName: 'Military Green', hex: '#556B2F', image: '/static/shirt4.png' },
+                    { id: 'shirt3.png', colorName: 'Crimson Red', hex: '#dc143c', image: '/static/shirt3.png' }
+                ]
+            },
+            {
+                groupId: 'hoodies_group', name: 'Cyber Winter Hoodie', price: 1999.00, tags: ['men', 'winter', 'casual'],
+                variations: [
+                    { id: 'hoodie1.png', colorName: 'Deep Ocean', hex: '#1e90ff', image: '/static/hoodie1.png' },
+                    { id: 'hoodie2.png', colorName: 'Graphite', hex: '#36454f', image: '/static/hoodie2.png' },
+                    { id: 'hoodie3.png', colorName: 'Maroon Red', hex: '#800000', image: '/static/hoodie3.png' }
+                ]
+            },
+
+            {
+                groupId: 'womens_tops', name: 'Chic Crop Top', price: 699.00, tags: ['women', 'casual', 'party', 'summer'],
+                variations: [
+                    { id: 'top1.png', colorName: 'Lavender', hex: '#E6E6FA', image: '/static/top1.png' },
+                    { id: 'top2.png', colorName: 'Midnight Black', hex: '#222222', image: '/static/top2.png' }
+                ]
+            }
+        ];
+
+        let activeColors = {}; groupedProducts.forEach(group => activeColors[group.groupId] = 0);
+        let cart = []; let wishlist = []; let isLoginView = true; let currentFilter = 'all';
+        let currentARShirt = ''; let currentARPrice = 0; let currentARName = ''; let currentARImage = ''; let currentARGroup = ''; 
+
+        // 2. CAMERA KILL SWITCH & NAVIGATION
+        function stopCamera() {
+            isLiveAR = false;
+            if (cameraStream) { cameraStream.getTracks().forEach(track => track.stop()); cameraStream = null; }
+            document.getElementById('webcam').srcObject = null;
+            document.getElementById('result-img').style.display = 'none';
+        }
+
+        function switchPage(pageId) {
+            if (pageId !== 'ar-page') { stopCamera(); }
+            
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+            
+            if (pageId === 'shop-page') renderShop();
+            if (pageId === 'wishlist-page') renderWishlist(); 
+            if (pageId === 'cart-page') renderCart();
+            if (pageId === 'checkout-page') renderCheckout();
+            window.scrollTo(0,0);
+        }
+
+        // 3. AUTHENTICATION (Modern SSO UI)
+        function renderAuth() {
+            const box = document.getElementById('auth-box');
+            const socialBtnStyle = "width: 100%; padding: 12px; border-radius: 25px; border: 1px solid var(--glass-border); font-weight: 600; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 15px; transition: 0.3s; font-family: 'Poppins', sans-serif;";
+
+            if(isLoginView) {
+                box.innerHTML = `
+                    <h1 style="margin-top: 0; margin-bottom: 5px; font-size: 32px;">Welcome Back</h1>
+                    <p style="color: #aaa; margin-top: 0; margin-bottom: 25px; font-size: 14px;">Sign in to access your virtual wardrobe.</p>
+                    <button onclick="login()" style="${socialBtnStyle} background: white; color: #333;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><img src="https://img.icons8.com/color/48/000000/google-logo.png" style="width: 22px; height: 22px;">Continue with Google</button>
+                    <button onclick="login()" style="${socialBtnStyle} background: #24292e; color: white;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" style="width: 24px; height: 24px;">Continue with GitHub</button>
+                    <div style="display: flex; align-items: center; gap: 10px; margin: 20px 0;"><hr style="flex: 1; border: none; border-top: 1px solid var(--glass-border);"><span style="color: #aaa; font-size: 12px; font-weight: 600;">OR EMAIL</span><hr style="flex: 1; border: none; border-top: 1px solid var(--glass-border);"></div>
+                    <input type="text" id="username" placeholder="Email or Username" value="Shivani">
+                    <input type="password" id="password" placeholder="Password" value="Shivani123"><br><br>
+                    <button class="primary-btn" onclick="login()">Sign In</button>
+                    <p style="margin-top: 25px; color: #aaa; font-size: 14px;">Don't have an account? <span style="color: var(--secondary); cursor: pointer; font-weight: bold;" onclick="toggleAuth()">Sign up</span></p>
+                `;
+            } else {
+                box.innerHTML = `
+                    <h1 style="margin-top: 0; margin-bottom: 5px; font-size: 32px;">Create Account</h1>
+                    <p style="color: #aaa; margin-top: 0; margin-bottom: 25px; font-size: 14px;">Join StyleAR today.</p>
+                    <button onclick="signup()" style="${socialBtnStyle} background: white; color: #333;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"><img src="https://img.icons8.com/color/48/000000/google-logo.png" style="width: 22px; height: 22px;">Sign up with Google</button>
+                    <div style="display: flex; align-items: center; gap: 10px; margin: 20px 0;"><hr style="flex: 1; border: none; border-top: 1px solid var(--glass-border);"><span style="color: #aaa; font-size: 12px; font-weight: 600;">OR EMAIL</span><hr style="flex: 1; border: none; border-top: 1px solid var(--glass-border);"></div>
+                    <input type="text" id="new-name" placeholder="Full Name">
+                    <input type="email" id="new-email" placeholder="Email Address">
+                    <input type="password" id="new-password" placeholder="Create Password"><br><br>
+                    <button class="primary-btn" onclick="signup()">Create Account</button>
+                    <p style="margin-top: 25px; color: #aaa; font-size: 14px;">Already have an account? <span style="color: var(--secondary); cursor: pointer; font-weight: bold;" onclick="toggleAuth()">Log in</span></p>
+                `;
+            }
+        }
+        function toggleAuth() { isLoginView = !isLoginView; renderAuth(); }
+        function login() { document.getElementById('navbar').style.display = 'flex'; switchPage('shop-page'); }
+        function signup() { alert("Account created successfully!"); document.getElementById('navbar').style.display = 'flex'; switchPage('shop-page'); }
+        function logout() { document.getElementById('navbar').style.display = 'none'; cart = []; wishlist = []; updateCartCount(); updateWishlistCount(); switchPage('login-page'); }
+
+        // 4. SMART WISHLIST LOGIC
+        function toggleWishlist(id, name, price, image) {
+            const index = wishlist.findIndex(item => item.id === id);
+            if (index > -1) { wishlist.splice(index, 1); } else { wishlist.push({ id, name, price, image }); }
+            updateWishlistCount();
+            if (document.getElementById('wishlist-page').classList.contains('active-page')) { renderWishlist(); } else { renderShop(); }
+        }
+        function updateWishlistCount() { document.getElementById('wishlist-count').innerText = wishlist.length; }
+        function renderWishlist() {
+            const container = document.getElementById('wishlist-container'); container.innerHTML = '';
+            if (wishlist.length === 0) { container.innerHTML = `<div style="width:100%; text-align:center; padding: 50px; color:#aaa;"><div style="font-size: 50px; margin-bottom: 20px;">🤍</div><h3>Your wishlist is empty</h3><button class="secondary-btn" style="margin-top: 15px;" onclick="switchPage('shop-page')">Browse Collection</button></div>`; return; }
+            wishlist.forEach(item => {
+                container.innerHTML += `
+                    <div class="product-card">
+                        <div class="wishlist-btn" onclick="toggleWishlist('${item.id}', '${item.name}', ${item.price}, '${item.image}')">❤️</div>
+                        <img class="main-img" src="${item.image}">
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <div><h3>${item.name.split(' - ')[0]}</h3><div style="color: #aaa; font-size: 14px;">${item.name.split(' - ')[1]}</div></div>
+                            <div style="color: var(--secondary); font-size: 22px; font-weight: 700;">₹${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="product-actions" style="margin-top: 15px;"><button class="primary-btn" style="width: 100%; padding: 12px; font-size: 14px;" onclick="addToCart('${item.id}', '${item.name}', ${item.price}, '${item.image}')">Add to Cart</button></div>
+                    </div>`;
+            });
+        }
+
+        // 5. AI STYLIST ENGINE & SHOP RENDER
+        function filterProducts(tag, buttonElement) { currentFilter = tag; const allButtons = buttonElement.parentElement.children; for(let btn of allButtons) { btn.style.borderColor = 'var(--glass-border)'; btn.style.color = '#fff'; } buttonElement.style.borderColor = 'var(--secondary)'; buttonElement.style.color = 'var(--secondary)'; renderShop(); }
+        function runAIStylist() {
+            const genderTag = document.getElementById('ai-gender').value; const occasionTag = document.getElementById('ai-occasion').value; const container = document.getElementById('shop-container');
+            container.innerHTML = `<div style="width: 100%; padding: 60px 20px;"><div style="width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--secondary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div><h3 style="color: var(--secondary); margin-top: 20px;">AI is curating your look...</h3></div>`;
+            setTimeout(() => { renderShopLogic(genderTag, occasionTag, container); }, 1200); 
+        }
+
+        function renderShopLogic(genderTag, occasionTag, container) {
+            container.innerHTML = ''; let matchesFound = 0;
+            groupedProducts.forEach(group => {
+                const matchesGender = (genderTag === 'all') || group.tags.includes(genderTag); const matchesOccasion = (occasionTag === 'all') || group.tags.includes(occasionTag);
+                if (matchesGender && matchesOccasion) {
+                    matchesFound++; const activeIndex = activeColors[group.groupId]; const activeVariant = group.variations[activeIndex];
+                    let swatchesHTML = '';
+                    group.variations.forEach((variant, index) => { const isActiveClass = (index === activeIndex) ? 'active-swatch' : ''; swatchesHTML += `<div class="color-swatch ${isActiveClass}" style="background-color: ${variant.hex};" onclick="selectColor('${group.groupId}', ${index})"></div>`; });
+                    const isWishlisted = wishlist.some(item => item.id === activeVariant.id); const heartSymbol = isWishlisted ? '❤️' : '🤍';
+                    container.innerHTML += `
+                        <div class="product-card">
+                            <div class="wishlist-btn" onclick="toggleWishlist('${activeVariant.id}', '${group.name} - ${activeVariant.colorName}', ${group.price}, '${activeVariant.image}')">${heartSymbol}</div>
+                            <img class="main-img" src="${activeVariant.image}">
+                            <div style="display:flex; justify-content:space-between; align-items:start;">
+                                <div><h3>${group.name}</h3><div style="color: #aaa; font-size: 14px;">${activeVariant.colorName}</div></div>
+                                <div style="color: var(--secondary); font-size: 22px; font-weight: 700;">₹${group.price.toFixed(2)}</div>
+                            </div>
+                            <div class="swatch-container">${swatchesHTML}</div>
+                            <div class="product-actions">
+                                <button class="primary-btn" style="flex: 2; padding: 12px; font-size: 14px;" onclick="startAR('${activeVariant.id}', '${group.name} - ${activeVariant.colorName}', ${group.price})">👁️ Try-On</button>
+                                <button class="secondary-btn" style="flex: 1; padding: 12px; font-size: 14px;" onclick="addToCart('${activeVariant.id}', '${group.name} - ${activeVariant.colorName}', ${group.price}, '${activeVariant.image}')">Add</button>
+                            </div>
+                        </div>`;
+                }
+            });
+            if (matchesFound === 0) container.innerHTML = `<div style="width: 100%; padding: 40px; color: #aaa;"><span style="font-size: 40px;">👗</span><h3>No exact matches found.</h3><button class="secondary-btn" onclick="renderShop()">View All</button></div>`;
+        }
+
+        function renderShop() { const genderTag = document.getElementById('ai-gender').value || 'all'; const occasionTag = document.getElementById('ai-occasion').value || 'all'; const container = document.getElementById('shop-container'); renderShopLogic(genderTag, occasionTag, container); }
+        function selectColor(groupId, index) { activeColors[groupId] = index; renderShop(); }
+
+        // 6. CART & CHECKOUT (UPDATED TO INR)
+        function addToCart(id, name, price, image) { cart.push({ id, name, price, image }); updateCartCount(); alert(`${name} added to cart!`); }
+        function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
+        function calculateTotals() { const subtotal = cart.reduce((sum, item) => sum + item.price, 0); return { subtotal, tax: subtotal * 0.08, total: subtotal + (subtotal * 0.08) }; }
+        function renderCart() {
+            const content = document.getElementById('cart-content');
+            if (cart.length === 0) return content.innerHTML = `<div style="width:100%; padding: 50px; color:#aaa;">Your bag is empty.</div>`;
+            let itemsHTML = '<div class="layout-main">';
+            cart.forEach((item, index) => itemsHTML += `<div class="cart-item"><div style="display:flex; align-items:center; gap: 20px;"><img src="${item.image}" style="width: 80px; height: 80px; background: rgba(0,0,0,0.3); border-radius: 12px; object-fit: contain; padding: 5px;"><span style="font-weight:600; font-size: 18px;">${item.name}</span></div><div style="display:flex; align-items:center; gap: 25px;"><span style="color:var(--secondary); font-size:20px; font-weight:700;">₹${item.price.toFixed(2)}</span><button class="secondary-btn" style="border-color: #ff4757; color: #ff4757;" onclick="removeFromCart(${index})">Remove</button></div></div>`);
+            itemsHTML += '</div>';
+            const totals = calculateTotals();
+            content.innerHTML = itemsHTML + `<div class="layout-sidebar"><h3 style="margin-top: 0; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">Order Summary</h3><div class="summary-row"><span>Subtotal</span><span>₹${totals.subtotal.toFixed(2)}</span></div><div class="summary-row"><span>Estimated Tax</span><span>₹${totals.tax.toFixed(2)}</span></div><div class="summary-total"><span>Total</span><span style="color:var(--secondary);">₹${totals.total.toFixed(2)}</span></div><button class="primary-btn" style="margin-top: 25px;" onclick="switchPage('checkout-page')">Proceed to Checkout</button></div>`;
+        }
+        function renderCheckout() { const totals = calculateTotals(); document.getElementById('checkout-summary').innerHTML = `<div class="summary-row" style="margin-top:20px;"><span>Items (${cart.length})</span><span>₹${totals.subtotal.toFixed(2)}</span></div><div class="summary-row"><span>Shipping</span><span style="color:var(--secondary);">FREE</span></div><div class="summary-row"><span>Tax</span><span>₹${totals.tax.toFixed(2)}</span></div><div class="summary-total"><span>Total</span><span style="color:var(--secondary);">₹${totals.total.toFixed(2)}</span></div>`; }
+        function removeFromCart(index) { cart.splice(index, 1); updateCartCount(); renderCart(); }
+        function placeOrder() { if (cart.length === 0) return; alert("Payment Successful!"); cart = []; updateCartCount(); switchPage('shop-page'); }
+
+        // 7. FULL-STACK SOCIAL POLLING LOGIC
+        function togglePayment(method) {
+            document.getElementById('card-inputs').style.display = method === 'card' ? 'block' : 'none';
+            document.getElementById('netbanking-inputs').style.display = method === 'netbanking' ? 'block' : 'none';
+            document.getElementById('upi-inputs').style.display = method === 'upi' ? 'block' : 'none';
+        }
+
+        async function openSharePage() {
+            if (!isLiveAR || document.getElementById('result-img').style.display === 'none') {
+                return alert("Put on an outfit first before asking your friends!");
+            }
+            
+            const feedbackUI = document.getElementById('gesture-feedback');
+            feedbackUI.innerText = "☁️ Uploading Secure Link...";
+            feedbackUI.style.opacity = '1';
+            feedbackUI.style.top = '30%';
+
+            try {
+                const payload = { image: document.getElementById('result-img').src, name: currentARName };
+                const res = await fetch('/create_poll', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+                const data = await res.json();
+                
+                if (data.success) {
+                    const myServerAddress = window.location.origin;
+                    document.getElementById('poll-link').value = `${myServerAddress}/poll/${data.poll_id}`;
+                    
+                    document.getElementById('poll-image').src = document.getElementById('result-img').src;
+                    document.getElementById('poll-item-name').innerText = currentARName;
+                    
+                    feedbackUI.style.opacity = '0';
+                    switchPage('share-page'); 
+                }
+            } catch (err) {
+                alert("Failed to connect to the server.");
+                feedbackUI.style.opacity = '0';
+            }
+        }
+        
+        function copyPollLink() { const copyText = document.getElementById("poll-link"); copyText.select(); document.execCommand("copy"); alert("Link Copied! Send it to your friends."); }
+        function simulateFriendView() { document.getElementById('poll-voting-area').style.display = 'block'; document.getElementById('poll-results-area').style.display = 'none'; document.getElementById('bar-yes').style.width = '0%'; document.getElementById('bar-no').style.width = '0%'; switchPage('poll-page'); }
+        function castVote(voteType) {
+            document.getElementById('poll-voting-area').style.display = 'none'; document.getElementById('poll-results-area').style.display = 'block';
+            setTimeout(() => {
+                if(voteType === 'yes') { document.getElementById('bar-yes').style.width = '88%'; document.getElementById('bar-no').style.width = '12%'; document.getElementById('vote-yes-text').innerText = '🔥 Buy It! (88%)'; document.getElementById('vote-no-text').innerText = '👎 Pass (12%)'; } 
+                else { document.getElementById('bar-yes').style.width = '24%'; document.getElementById('bar-no').style.width = '76%'; document.getElementById('vote-yes-text').innerText = '🔥 Buy It! (24%)'; document.getElementById('vote-no-text').innerText = '👎 Pass (76%)'; }
+            }, 100);
+        }
+
+        // 8. AR VIRTUAL FITTING ROOM LOGIC (UPDATED TO INR)
+        const video = document.getElementById('webcam'); const canvas = document.getElementById('canvas'); const ctx = canvas.getContext('2d'); const resultImg = document.getElementById('result-img'); const loadingOverlay = document.getElementById('loading-overlay'); const aiSizingText = document.getElementById('predicted-size-text'); const feedbackUI = document.getElementById('gesture-feedback');
+        let cameraStream = null; let isLiveAR = false; let isARPaused = false; let gestureLocked = false; 
+
+        function handleGesture(gesture) {
+            if (gestureLocked) return;
+            if (gesture === 'open_palm') { isARPaused = !isARPaused; showGestureFeedback(isARPaused ? "✋ AR Paused" : "▶️ AR Resumed"); lockGesture(); return; }
+            if (isARPaused) return;
+
+            const categoryItems = getActiveCarouselItems(); const currentIndex = categoryItems.findIndex(i => i.id === currentARShirt);
+            if (currentIndex === -1) return;
+
+            if (gesture === 'thumbs_up' || gesture === 'point_right') {
+                const nextItem = categoryItems[(currentIndex + 1) % categoryItems.length];
+                swapShirtAR(nextItem.id, nextItem.name, nextItem.price, nextItem.image); showGestureFeedback("👍 Next Style"); lockGesture();
+            } else if (gesture === 'point_left') {
+                const prevItem = categoryItems[(currentIndex - 1 + categoryItems.length) % categoryItems.length];
+                swapShirtAR(prevItem.id, prevItem.name, prevItem.price, prevItem.image); showGestureFeedback("👈 Previous Style"); lockGesture();
+            }
+        }
+
+        function lockGesture() { gestureLocked = true; setTimeout(() => { gestureLocked = false; }, 2500); }
+        function showGestureFeedback(text) { feedbackUI.innerText = text; feedbackUI.style.opacity = '1'; feedbackUI.style.top = '30%'; setTimeout(() => { feedbackUI.style.opacity = '0'; feedbackUI.style.top = '25%'; }, 1200); }
+        function getActiveCarouselItems() { const group = groupedProducts.find(g => g.groupId === currentARGroup); if (!group) return []; return group.variations.map(v => ({ id: v.id, name: `${group.name} - ${v.colorName}`, price: group.price, image: v.image })); }
+
+        function renderARCarousel() { 
+            const carousel = document.getElementById('ar-clothing-carousel'); carousel.innerHTML = ''; 
+            getActiveCarouselItems().forEach(p => { 
+                const isActive = (p.id === currentARShirt) ? 'active-item' : ''; 
+                carousel.innerHTML += `<div class="ar-item ${isActive}" onclick="swapShirtAR('${p.id}', '${p.name}', ${p.price}, '${p.image}')"><img src="${p.image}" style="width: 85%; height: 85%; min-width: 50px; min-height: 50px; object-fit: contain; display: block;"></div>`; 
+            }); 
+        }
+
+        function swapShirtAR(id, name, price, img) { 
+            currentARShirt = id; currentARPrice = price; currentARName = name; currentARImage = img; 
+            if(currentARShirt !== '') { resultImg.style.display = 'block'; document.getElementById('ar-product-title').innerText = name; document.getElementById('ar-product-price').innerText = `₹${price.toFixed(2)}`; } 
+            renderARCarousel(); 
+        }
+
+        function clearARShirt() { currentARShirt = ''; resultImg.style.display = 'none'; document.getElementById('ar-product-title').innerText = "Select garment"; document.getElementById('ar-product-price').innerText = "--"; aiSizingText.innerText = "Waiting..."; renderARCarousel(); }
+        
+        function startAR(id, name, price) { 
+            const group = groupedProducts.find(g => g.variations.some(v => v.id === id));
+            if(group) currentARGroup = group.groupId;
+            const item = getActiveCarouselItems().find(i => i.id === id); 
+            swapShirtAR(id, name, price, item.image); switchPage('ar-page'); startCamera(); 
+        }
+        
+        function buyFromAR() { if(currentARShirt !== '') addToCart(currentARShirt, currentARName, currentARPrice, currentARImage); }
+        
+        function startCamera() {
+            if (!cameraStream) { navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } }).then(stream => { cameraStream = stream; video.srcObject = stream; setTimeout(() => { isLiveAR = true; loadingOverlay.style.display = 'flex'; processLiveFrame(); }, 1000); }).catch(err => alert("Camera access required."));
+            } else { isLiveAR = true; processLiveFrame(); }
+        }
+        
+        async function processLiveFrame() {
+            if (!isLiveAR) return; if (currentARShirt === '') { requestAnimationFrame(processLiveFrame); return; }
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            try {
+                const payload = JSON.stringify({ image: canvas.toDataURL('image/jpeg', 0.4), shirt: currentARShirt });
+                const res = await fetch('/process', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload });
+                const data = await res.json();
+                
+                if (data.success && isLiveAR) { 
+                    if (data.gesture) { handleGesture(data.gesture); }
+                    if (!isARPaused) {
+                        resultImg.src = data.image; 
+                        if(currentARShirt !== '') { resultImg.style.display = 'block'; loadingOverlay.style.display = 'none'; } 
+                        if (data.size) aiSizingText.innerText = data.size; 
+                    }
+                }
+            } catch (err) {}
+            if (isLiveAR) requestAnimationFrame(processLiveFrame);
+        }
+        
+        function takeSnapshot() { if (!isLiveAR || resultImg.style.display === 'none') return; const a = document.createElement('a'); a.href = resultImg.src; a.download = `StyleAR_${Date.now()}.jpg`; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
+
+        // Init App
+        renderAuth();
+    </script>
+</body>
+</html>

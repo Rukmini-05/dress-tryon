@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleAR - Vote on my Outfit!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #121212; color: white; text-align: center; padding: 50px 20px; margin: 0; }
+        .poll-card { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); max-width: 450px; margin: 0 auto; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        button { border: none; border-radius: 12px; font-family: 'Poppins', sans-serif; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { transform: scale(1.05); }
+        .poll-bar { height: 24px; background: rgba(255,255,255,0.1); border-radius: 12px; margin-top: 15px; overflow: hidden; display: flex; }
+    </style>
+</head>
+<body>
+    <h1>Help me decide!</h1>
+    <p style="color: #aaa;">Your friend is trying on the <span style="color: #03dac6; font-weight: bold;">{{ poll.name }}</span>.</p>
+    
+    <div class="poll-card" id="card">
+        <img src="{{ poll.image }}" style="width: 100%; border-radius: 16px; margin-bottom: 25px;">
+        
+        <div id="voting-area" style="display: flex; gap: 15px;">
+            <button style="flex: 1; font-size: 18px; padding: 15px; background: #03dac6; color: black;" onclick="vote('yes')">🔥 Buy It!</button>
+            <button style="flex: 1; font-size: 18px; padding: 15px; background: transparent; color: #cf6679; border: 1px solid #cf6679;" onclick="vote('no')">👎 Pass</button>
+        </div>
+
+        <div id="results-area" style="display: none; text-align: left;">
+            <h3 style="margin: 0 0 15px 0;">Live Results</h3>
+            <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                <span style="color: #03dac6;" id="vote-yes-text">🔥 Buy It! (88%)</span>
+                <span style="color: #cf6679;" id="vote-no-text">👎 Pass (12%)</span>
+            </div>
+            <div class="poll-bar">
+                <div style="height: 100%; background: #03dac6; width: 88%;"></div>
+                <div style="height: 100%; background: #cf6679; width: 12%;"></div>
+            </div>
+            <p style="text-align: center; color: #aaa; margin-top: 20px;">Thanks for voting!</p>
+        </div>
+    </div>
+
+    <script>
+        function vote(choice) {
+            document.getElementById('voting-area').style.display = 'none';
+            document.getElementById('results-area').style.display = 'block';
+            // In a real app, this would send the vote back to the database!
+        }
+    </script>
+</body>
+</html>
+
